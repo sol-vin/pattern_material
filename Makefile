@@ -25,7 +25,7 @@ else
 		SO_EXT          = so
 		EXE_EXT         =
 		GODOT           ?= $(if $(wildcard ./godot),./godot,$(if $(wildcard ../godot),../godot,godot))
-		LINK_FLAGS      ?= -shared
+		LINK_FLAGS      ?= -shared -Wl,--undefined-version
 	endif
 endif
 

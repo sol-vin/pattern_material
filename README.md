@@ -1,7 +1,7 @@
 # Pattern Material for Lapis 🎨
 
 <!-- carbon:badges -->
-[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](shard.yml)
+[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/sol-vin/pattern_material/releases)
 [![Crystal](https://img.shields.io/badge/crystal-%3E%3D%201.10.0-black.svg)](https://crystal-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Godot](https://img.shields.io/badge/Godot-4.8+-478CBF.svg?logo=godotengine)](https://godotengine.org)

@@ -1,5 +1,5 @@
 name: pattern_material
-version: 0.1.1
+version: 0.1.2
 authors:
   - Ian Rash <redcodefinal@gmail.com>
 description: Pattern Replace ShaderMaterial, 88 repeating SVG patterns, 32-color palette, spritesheet atlas builders, and 14 procedural pattern generators for Godot 4 & Lapis.

@@ -23,9 +23,20 @@ settings:
       title: "\U0001F6E0️ Chores & Tooling"
       bullet: •
 releases:
-- version: 0.1.1
+- version: 0.1.2
   date: "2026-10-21"
   status: active
+  entries:
+  - type: fix
+    description: add libxml2-dev and -Wl,--undefined-version for Linux shared library
+      linking
+    bullet: ✓
+    badge: '[CI]'
+    hash: fc0bdd6
+    author: Ian Rash
+- version: 0.1.1
+  date: "2026-10-21"
+  status: released
   entries:
   - type: feat
     description: initial release of pattern_material addon for Godot 4 and Lapis

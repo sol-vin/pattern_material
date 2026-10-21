@@ -62,7 +62,7 @@ jobs:
           fi
           if [ "${{ runner.os }}" = "Linux" ]; then
             sudo apt-get update
-            PKGS="lld make g++ libgc-dev wget unzip curl"
+            PKGS="lld make g++ libgc-dev libxml2-dev wget unzip curl"
             [ "$NEEDS_VLC" = "true" ] && PKGS="$PKGS libvlc-dev vlc"
             sudo apt-get install -y $PKGS
           elif [ "${{ runner.os }}" = "macOS" ] && [ "$NEEDS_VLC" = "true" ]; then
@@ -355,11 +355,11 @@ jobs:
           ADDON_NAME=$(awk '/^name:/ {print $2}' shard.yml 2>/dev/null | tr -d ' "\r\n')
           if [ -z "$ADDON_NAME" ]; then ADDON_NAME="crystal_addon"; fi
           SO_EXT="${{ runner.os == 'macOS' && 'dylib' || 'so' }}"
-          LINK_FLAG="${{ runner.os == 'macOS' && '-dynamiclib' || '-shared' }}"
+          LINK_FLAG="${{ runner.os == 'macOS' && '-dynamiclib' || '-shared -Wl,--undefined-version' }}"
           if [ ! -f "addons/${ADDON_NAME}/bin/game.${SO_EXT}" ]; then
             echo "Fallback direct compilation..."
             mkdir -p "addons/${ADDON_NAME}/bin"
-            crystal build src/main.cr -o "addons/${ADDON_NAME}/bin/game.${SO_EXT}" --link-flags "${LINK_FLAG}" -Dlibgodot_addon
+            crystal build src/main.cr -o "addons/${ADDON_NAME}/bin/game.${SO_EXT}" --link-flags "${LINK_FLAG}" --no-debug -Dlibgodot_addon
           fi
 
       - name: Build Addon Project (Windows)
