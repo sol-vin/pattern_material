@@ -1,0 +1,61 @@
+---
+settings:
+  title: PATTERN MATERIAL CHANGELOG
+  output_file: CHANGELOG.md
+  auto_link_github: true
+  categories:
+    breaking:
+      title: "\U0001F4A5 Breaking Changes"
+      bullet: ▲
+    features:
+      title: ✨ Features & Improvements
+      bullet: ✦
+    fixes:
+      title: "\U0001F41B Bug Fixes"
+      bullet: ✓
+    perf:
+      title: ⚡ Performance Optimizations
+      bullet: "\U0001F680"
+    docs:
+      title: "\U0001F4DA Documentation"
+      bullet: "\U0001F4D6"
+    maintenance:
+      title: "\U0001F6E0️ Chores & Tooling"
+      bullet: •
+releases:
+- version: 0.1.1
+  date: "2026-10-21"
+  status: active
+  entries:
+  - type: feat
+    description: initial release of pattern_material addon for Godot 4 and Lapis
+    bullet: ✦
+    hash: 99bb486
+    author: Ian Rash
+- version: 0.1.0
+  date: "2026-10-21"
+  status: released
+  summary: Initial release of the Pattern Material addon for Godot 4.8+ and Lapis.
+  entries:
+  - type: feat
+    description: Added `pattern_replace.gdshader` with duotone color replacement,
+      2D/3D surface projection (`WorldTriplanar`, `MeshUV`, `Cylindrical`), boiling
+      outlines, bevel/rim lighting, Fresnel glow, Bayer dithering, dissolve, retro
+      CRT glitch/scanlines, screen-space backdrop FX, and vertex motion.
+    hash: initial
+  - type: feat
+    description: Added `PolkaDotPattern`, `StripePattern`, `CheckerPattern`, `ZigZagPattern`,
+      `WavePattern`, `RingPattern`, `HexagonPattern`, `DiamondPattern`, `CrossPattern`,
+      `StarPattern`, `BrickPattern`, `HoundstoothPattern`, `HalftonePattern`, and
+      `CustomPatternGenerator` with Inspector exports and `Patterns` factory methods.
+    hash: generators
+  - type: feat
+    description: Bundled 88 Hero Patterns SVGs (`Patterns`), the 32-color `Palette`
+      loader, `SpritesheetAtlas`, `Faces`, `Glyphs`, `SvgSpritesheetBuilder`, `FacesSpritesheetBuilder`,
+      `FontAwesomeCategories`, `PatternGeneratorTool`, and 4 `.tres` material presets.
+    hash: assets
+  - type: docs
+    description: Added structured Jasper documentation (`PatternMaterialAddon::Docs`),
+      headless and in-editor spec suites, SVG synthesis benchmarks, and GitHub Actions
+      CI/Release pipelines supporting `lapis install addon github:sol-vin/pattern_material`.
+    hash: docs

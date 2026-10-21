@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="336" height="352" viewBox="0 0 84 88">
+  <!-- Brick Wall (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="84" height="88" fill="#000000" />
+  <g><g fill="none" fill-rule="evenodd"><g fill="#ffffff"><path d="M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z"/></g></g></g>
+  <g transform="translate(42, 0)"><g fill="none" fill-rule="evenodd"><g fill="#ffffff"><path d="M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z"/></g></g></g>
+  <g transform="translate(0, 44)"><g fill="none" fill-rule="evenodd"><g fill="#ffffff"><path d="M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z"/></g></g></g>
+  <g transform="translate(42, 44)"><g fill="none" fill-rule="evenodd"><g fill="#ffffff"><path d="M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z"/></g></g></g>
+</svg>

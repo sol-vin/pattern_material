@@ -1,0 +1,60 @@
+id: A_PROCEDURAL_GENERATORS
+title: "14 Procedural Pattern Generators"
+summary: "Generating crisp, seamless repeating patterns at runtime with PatternGenerator < ImageTexture subclasses."
+track: "02_generators"
+root_module: "PatternMaterialAddon::Docs"
+overview: |
+  Every procedural pattern generator in `pattern_material` inherits directly from `PatternGenerator < Godot::ImageTexture`.
+  Each generator builds a mathematically exact, seamless SVG document from typed Crystal parameters and rasterizes
+  it on demand via `Godot::Image#load_svg_from_string`, making it a drop-in `Texture2D` for `UniversalMaterial`,
+  `PatternShaderMaterial`, `Sprite3D`, or `TextureRect`.
+related_sources:
+  - "src/generators/pattern_generator.cr"
+  - "src/generators/generators.cr"
+sections:
+  - id: topic_01_generator_catalog
+    title: "Built-In Pattern Generators"
+    summary: "All 14 procedural pattern generators and their customizable parameters."
+    content: |
+      The following 14 generator classes are available via `Patterns` factory helpers or direct instantiation:
+
+      - **`PolkaDotPattern`** (`Patterns.polka_dots`): `dot_radius`, `columns`, `rows`, `stagger`, `ring_thickness`.
+      - **`StripePattern`** (`Patterns.stripes`): `stripe_count`, `duty_cycle`, `angle_degrees`, `crosshatch`.
+      - **`CheckerPattern`** (`Patterns.checkers`): `columns`, `rows`, `cell_inset`, `corner_radius`.
+      - **`ZigZagPattern`** (`Patterns.zig_zag`): `peaks`, `bands`, `amplitude`, `thickness`.
+      - **`WavePattern`** (`Patterns.waves`): `waves`, `bands`, `amplitude`, `thickness`.
+      - **`RingPattern`** (`Patterns.rings`): `ring_count`, `ring_width`, `max_radius`, `corner_overlays`.
+      - **`HexagonPattern`** (`Patterns.hexagons`): `columns`, `rows`, `hex_radius`, `stroke_width`, `flat_top`.
+      - **`DiamondPattern`** (`Patterns.diamonds`): `columns`, `rows`, `diamond_scale`, `hollow_stroke`.
+      - **`CrossPattern`** (`Patterns.crosses`): `columns`, `rows`, `arm_length`, `arm_thickness`, `diagonal_x`.
+      - **`StarPattern`** (`Patterns.stars`): `columns`, `rows`, `points`, `outer_radius`, `inner_radius`, `rotation_degrees`.
+      - **`BrickPattern`** (`Patterns.bricks`): `columns`, `rows`, `mortar_gap`, `row_offset`, `corner_radius`.
+      - **`HoundstoothPattern`** (`Patterns.houndstooth`): `subdivisions`, `tooth_slant`.
+      - **`HalftonePattern`** (`Patterns.halftone`): `columns`, `rows`, `min_radius`, `max_radius`, `radial_falloff`, `invert_falloff`.
+      - **`CustomPatternGenerator`** (`Patterns.custom`): Unified multi-preset generator with `PatternKind` enum (`PolkaDots`, `Stripes`, `Checkers`, `ZigZag`, `Waves`, `Rings`, `Hexagons`, `Diamonds`, `Crosses`, `Stars`, `Bricks`, `Houndstooth`, `Halftone`).
+
+  - id: topic_02_code_examples
+    title: "Using Generators in Code"
+    summary: "Instantiating generators with Patterns factory helpers and UniversalMaterial."
+    content: |
+      Create procedural patterns using `Patterns` factory helpers and attach them directly to `UniversalMaterial`:
+
+      ```crystal
+      dots = Patterns.polka_dots(
+        dot_radius: 14.0,
+        columns: 3,
+        rows: 3,
+        stagger: true
+      )
+
+      stripes = Patterns.stripes(
+        stripe_count: 6,
+        duty_cycle: 0.4,
+        angle_degrees: 45.0,
+        crosshatch: true
+      )
+
+      umat = PatternMaterial.new
+        .set_generator(dots)
+        .set_colors(fg: "hot_watermelon", bg: "ice_aqua", outline: "white")
+      ```

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64">
+  <!-- Tiny Checkers (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="64" height="64" fill="#000000" />
+  <g><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 0)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 8)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 16)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 24)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 32)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 40)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 48)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(0, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(8, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(16, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(24, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(32, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(40, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(48, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+  <g transform="translate(56, 56)"><g fill="#ffffff"><path fill-rule="evenodd" d="M0 0h4v4H0V0zm4 4h4v4H4V4z"/></g></g>
+</svg>

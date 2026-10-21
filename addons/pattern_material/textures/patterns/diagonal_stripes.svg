@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 80 80">
+  <!-- Diagonal Stripes (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="80" height="80" fill="#000000" />
+  <g><g fill="#ffffff" fill-rule="evenodd"><path d="M0 40L40 0H20L0 20M40 40V20L20 40"/></g></g>
+  <g transform="translate(40, 0)"><g fill="#ffffff" fill-rule="evenodd"><path d="M0 40L40 0H20L0 20M40 40V20L20 40"/></g></g>
+  <g transform="translate(0, 40)"><g fill="#ffffff" fill-rule="evenodd"><path d="M0 40L40 0H20L0 20M40 40V20L20 40"/></g></g>
+  <g transform="translate(40, 40)"><g fill="#ffffff" fill-rule="evenodd"><path d="M0 40L40 0H20L0 20M40 40V20L20 40"/></g></g>
+</svg>

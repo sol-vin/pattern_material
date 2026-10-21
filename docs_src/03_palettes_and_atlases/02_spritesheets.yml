@@ -1,0 +1,27 @@
+id: B_SPRITESHEETS
+title: "Spritesheet Atlas & SVG Builders"
+summary: "Packing SVG directories into AtlasTexture grids and building procedural face/icon atlases."
+track: "03_palettes_and_atlases"
+root_module: "PatternMaterialAddon::Docs"
+overview: |
+  In addition to repeating pattern textures, `pattern_material` includes `SpritesheetAtlas` and three
+  editor `@[Tool]` nodes (`SvgSpritesheetBuilder`, `FacesSpritesheetBuilder`, and `FontAwesomeCategories`)
+  for packing SVG icon sets into single-texture atlases with JSON metadata.
+related_sources:
+  - "src/resources/spritesheet_atlas.cr"
+  - "src/resources/spritesheets.cr"
+  - "src/tools/svg_spritesheet_builder.cr"
+  - "src/tools/faces_spritesheet_builder.cr"
+sections:
+  - id: topic_01_spritesheet_atlas
+    title: "SpritesheetAtlas & Spritesheets"
+    summary: "Querying AtlasTexture regions by icon name, category, or index."
+    content: |
+      `SpritesheetAtlas` loads a `.png`/`.svg` spritesheet paired with a `.json` layout manifest and creates
+      cached `Godot::AtlasTexture` instances for each cell:
+
+      ```crystal
+      atlas = Spritesheets.get("faces")
+      smile_tex = Faces["smile"]
+      random_face = Faces.sample
+      ```

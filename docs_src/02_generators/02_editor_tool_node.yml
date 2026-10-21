@@ -1,0 +1,21 @@
+id: B_EDITOR_TOOL_NODE
+title: "Visual PatternGeneratorTool Node"
+summary: "Interactive in-editor pattern customization, 2D/3D live preview, and SVG/PNG baking."
+track: "02_generators"
+root_module: "PatternMaterialAddon::Docs"
+overview: |
+  `PatternGeneratorTool < Node3D` is an `@[Tool]` node that runs live inside the Godot Editor.
+  Adding it to a scene spawns a 2D `Sprite3D` texture preview and a 3D `MeshInstance3D` sphere with
+  `UniversalMaterial` applied, allowing artists and designers to tweak pattern generator parameters
+  with real-time visual feedback and bake `.svg` or `.png` textures to disk.
+related_sources:
+  - "src/tools/pattern_generator_node.cr"
+sections:
+  - id: topic_01_inspector_workflow
+    title: "Live Editor Preview & Inspector Controls"
+    summary: "Selecting generator types, colors, and parameters in the Godot Inspector."
+    content: |
+      1. Add a `PatternGeneratorTool` node to any 3D scene in the Godot Editor.
+      2. Choose a `generator_type` (`0..13`) from the Inspector dropdown (`PolkaDot`, `Stripe`, `Checkerboard`, `Grid`, `Brick`, `Houndstooth`, `Herringbone`, `Chevron`, `Tartan`, `Wave`, `Argyle`, `Hexagon`, `Diamond`, `Crosshatch`).
+      3. Adjust resolution (`texture_width`, `texture_height`), `foreground_color`, `background_color`, `material_base_color`, `material_pattern_color`, `material_pattern_scale`, and generator-specific sliders (`dot_radius`, `stripe_count`, `brick_rows`, etc.).
+      4. Toggle `bake_now` with an `output_svg_path` or `output_png_path` to export the generated texture to your project assets.

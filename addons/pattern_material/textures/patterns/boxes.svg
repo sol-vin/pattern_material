@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 60 60">
+  <!-- Boxes (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="60" height="60" fill="#000000" />
+  <g><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(20, 0)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(40, 0)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(0, 20)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(20, 20)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(40, 20)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(0, 40)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(20, 40)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+  <g transform="translate(40, 40)"><path d="M0 0h20L0 20z" fill="#ffffff" fill-rule="evenodd"/></g>
+</svg>

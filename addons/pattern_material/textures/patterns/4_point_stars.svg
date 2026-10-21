@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="288" height="288" viewBox="0 0 72 72">
+  <!-- 4 Point Stars (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="72" height="72" fill="#000000" />
+  <g><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(24, 0)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(48, 0)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(0, 24)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(24, 24)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(48, 24)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(0, 48)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(24, 48)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+  <g transform="translate(48, 48)"><g fill="#ffffff"><polygon fill-rule="evenodd" points="8 4 12 6 8 8 6 12 4 8 0 6 4 4 6 0 8 4"/></g></g>
+</svg>

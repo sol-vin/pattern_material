@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64">
+  <!-- Squares (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="64" height="64" fill="#000000" />
+  <g><g fill-rule="evenodd"><g fill="#ffffff" fill-rule="nonzero"><path d="M6 18h12V6H6v12zM4 4h16v16H4V4z"/></g></g></g>
+  <g transform="translate(32, 0)"><g fill-rule="evenodd"><g fill="#ffffff" fill-rule="nonzero"><path d="M6 18h12V6H6v12zM4 4h16v16H4V4z"/></g></g></g>
+  <g transform="translate(0, 32)"><g fill-rule="evenodd"><g fill="#ffffff" fill-rule="nonzero"><path d="M6 18h12V6H6v12zM4 4h16v16H4V4z"/></g></g></g>
+  <g transform="translate(32, 32)"><g fill-rule="evenodd"><g fill="#ffffff" fill-rule="nonzero"><path d="M6 18h12V6H6v12zM4 4h16v16H4V4z"/></g></g></g>
+</svg>

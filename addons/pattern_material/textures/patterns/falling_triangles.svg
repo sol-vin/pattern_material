@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="288" height="288" viewBox="0 0 72 72">
+  <!-- Falling Triangles (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="72" height="72" fill="#000000" />
+  <g><g fill-rule="evenodd"><g fill="#ffffff"><path d="M2 6h12L8 18 2 6zm18 36h12l-6 12-6-12z"/></g></g></g>
+  <g transform="translate(36, 0)"><g fill-rule="evenodd"><g fill="#ffffff"><path d="M2 6h12L8 18 2 6zm18 36h12l-6 12-6-12z"/></g></g></g>
+</svg>

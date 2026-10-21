@@ -1,0 +1,29 @@
+title: "Pattern Material Documentation"
+namespace: "PatternMaterialAddon::Docs"
+source_dir: "docs_src"
+output_file: "src/docs.cr"
+
+tracks:
+  - id: "01_getting_started"
+    title: "Getting Started"
+    description: "Installation, architecture overview, UniversalMaterial, and PatternShaderMaterial."
+    dir: "01_getting_started"
+    order:
+      - "01_overview"
+      - "02_universal_material"
+
+  - id: "02_generators"
+    title: "Procedural Pattern Generators"
+    description: "14 procedural SVG/ImageTexture pattern generators and the visual PatternGeneratorTool editor node."
+    dir: "02_generators"
+    order:
+      - "01_procedural_generators"
+      - "02_editor_tool_node"
+
+  - id: "03_palettes_and_atlases"
+    title: "Palettes, Patterns & Spritesheet Atlases"
+    description: "32-color Palette, 88 Hero Patterns SVGs, SpritesheetAtlas, and editor spritesheet builders."
+    dir: "03_palettes_and_atlases"
+    order:
+      - "01_palettes_and_patterns"
+      - "02_spritesheets"

@@ -1,0 +1,18 @@
+name: pattern_material
+version: 0.1.1
+authors:
+  - Ian Rash <redcodefinal@gmail.com>
+description: Pattern Replace ShaderMaterial, 88 repeating SVG patterns, 32-color palette, spritesheet atlas builders, and 14 procedural pattern generators for Godot 4 & Lapis.
+license: MIT
+crystal: ">= 1.10.0"
+
+dependencies:
+  lapis:
+    path: lib/lapis
+
+# Addons installed via 'lapis install addon <spec>' will be tracked here.
+addons: {}
+
+targets:
+  addon:
+    main: src/main.cr

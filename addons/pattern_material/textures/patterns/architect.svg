@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="398" viewBox="0 0 200 199">
+  <!-- Architect (Hero Patterns, Seamless Black & White Tile) -->
+  <rect width="200" height="199" fill="#000000" />
+  <g><g fill="#ffffff"><path d="M0 199V0h1v1.99L100 199h-1.12L1 4.22V199H0zM100 2h-.12l-1-2H100v2z"></path></g></g>
+  <g transform="translate(100, 0)"><g fill="#ffffff"><path d="M0 199V0h1v1.99L100 199h-1.12L1 4.22V199H0zM100 2h-.12l-1-2H100v2z"></path></g></g>
+</svg>
