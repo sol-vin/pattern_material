@@ -1,4 +1,12 @@
 # PATTERN MATERIAL CHANGELOG
+## [0.1.4] - 2026-11-04
+### 🐛 Bug Fixes
+- ✓ **[CI]** add libxml2-dev and -Wl,--undefined-version for Linux shared library linking ([`940a1b3`](https://github.com/sol-vin/pattern_material/commit/940a1b3))
+
+### 🛠️ Chores & Tooling
+- • **[DEPS]** upgrade Lapis to Godot 4.8-beta2 and include pattern material presets/animator ([`8d8d4d0`](https://github.com/sol-vin/pattern_material/commit/8d8d4d0))
+
+---
 ## [0.1.3] - 2026-11-04
 ### 🐛 Bug Fixes
 - ✓ **[CI]** add libxml2-dev and -Wl,--undefined-version for Linux shared library linking ([`940a1b3`](https://github.com/sol-vin/pattern_material/commit/940a1b3))

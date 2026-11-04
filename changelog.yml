@@ -23,9 +23,26 @@ settings:
       title: "\U0001F6E0️ Chores & Tooling"
       bullet: •
 releases:
-- version: 0.1.3
+- version: 0.1.4
   date: "2026-11-04"
   status: active
+  entries:
+  - type: fix
+    description: add libxml2-dev and -Wl,--undefined-version for Linux shared library
+      linking
+    bullet: ✓
+    badge: '[CI]'
+    hash: 940a1b3
+    author: Ian Rash
+  - type: chore
+    description: upgrade Lapis to Godot 4.8-beta2 and include pattern material presets/animator
+    bullet: •
+    badge: '[DEPS]'
+    hash: 8d8d4d0
+    author: Ian Rash
+- version: 0.1.3
+  date: "2026-11-04"
+  status: released
   entries:
   - type: fix
     description: add libxml2-dev and -Wl,--undefined-version for Linux shared library
