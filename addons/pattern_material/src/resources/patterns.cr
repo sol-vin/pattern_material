@@ -494,6 +494,161 @@ module Patterns
     gen
   end
 
+  # Creates a customized `TruchetPattern` procedural maze / Smith-arc texture generator.
+  def self.truchet(
+    columns : Int = 4,
+    rows : Int = 4,
+    stroke_width : Float64 = 6.0,
+    seed : Int = 42,
+    curved_arcs : Bool = true,
+    tile_size : Int = 128,
+    invert : Bool = false
+  ) : TruchetPattern
+    gen = TruchetPattern.new
+    gen.tile_size = tile_size.to_i64
+    gen.invert = invert
+    gen.columns = columns.to_i64
+    gen.rows = rows.to_i64
+    gen.stroke_width = stroke_width
+    gen.seed = seed.to_i64
+    gen.curved_arcs = curved_arcs
+    gen
+  end
+
+  # Creates a customized `SpiralPattern` procedural vortex texture generator.
+  def self.spirals(
+    columns : Int = 2,
+    rows : Int = 2,
+    turns : Float64 = 2.0,
+    arms : Int = 2,
+    stroke_width : Float64 = 4.0,
+    tile_size : Int = 128,
+    invert : Bool = false
+  ) : SpiralPattern
+    gen = SpiralPattern.new
+    gen.tile_size = tile_size.to_i64
+    gen.invert = invert
+    gen.columns = columns.to_i64
+    gen.rows = rows.to_i64
+    gen.turns = turns
+    gen.arms = arms.to_i64
+    gen.stroke_width = stroke_width
+    gen
+  end
+
+  # Creates a customized `CellularPattern` procedural Voronoi / caustics texture generator.
+  def self.cellular(
+    columns : Int = 4,
+    rows : Int = 4,
+    jitter : Float64 = 0.45,
+    cell_scale : Float64 = 0.72,
+    seed : Int = 17,
+    rounded : Bool = true,
+    tile_size : Int = 128,
+    invert : Bool = false
+  ) : CellularPattern
+    gen = CellularPattern.new
+    gen.tile_size = tile_size.to_i64
+    gen.invert = invert
+    gen.columns = columns.to_i64
+    gen.rows = rows.to_i64
+    gen.jitter = jitter
+    gen.cell_scale = cell_scale
+    gen.seed = seed.to_i64
+    gen.rounded = rounded
+    gen
+  end
+
+  # Creates a customized `TartanPattern` procedural plaid weave texture generator.
+  def self.tartan(
+    subdivisions : Int = 2,
+    main_band_width : Float64 = 16.0,
+    accent_band_width : Float64 = 4.0,
+    diagonal_twill : Bool = true,
+    tile_size : Int = 128,
+    invert : Bool = false
+  ) : TartanPattern
+    gen = TartanPattern.new
+    gen.tile_size = tile_size.to_i64
+    gen.invert = invert
+    gen.subdivisions = subdivisions.to_i64
+    gen.main_band_width = main_band_width
+    gen.accent_band_width = accent_band_width
+    gen.diagonal_twill = diagonal_twill
+    gen
+  end
+
+  # Creates a customized `CircuitPattern` procedural PCB traces & pads texture generator.
+  def self.circuit(
+    columns : Int = 4,
+    rows : Int = 4,
+    trace_width : Float64 = 3.5,
+    pad_radius : Float64 = 6.0,
+    seed : Int = 98,
+    tile_size : Int = 128,
+    invert : Bool = false
+  ) : CircuitPattern
+    gen = CircuitPattern.new
+    gen.tile_size = tile_size.to_i64
+    gen.invert = invert
+    gen.columns = columns.to_i64
+    gen.rows = rows.to_i64
+    gen.trace_width = trace_width
+    gen.pad_radius = pad_radius
+    gen.seed = seed.to_i64
+    gen
+  end
+
+  # Creates a customized `ScalesPattern` procedural Seigaiha / wave-arch texture generator.
+  def self.scales(
+    columns : Int = 2,
+    rows : Int = 2,
+    arch_rings : Int = 3,
+    stroke_width : Float64 = 4.0,
+    tile_size : Int = 128,
+    invert : Bool = false
+  ) : ScalesPattern
+    gen = ScalesPattern.new
+    gen.tile_size = tile_size.to_i64
+    gen.invert = invert
+    gen.columns = columns.to_i64
+    gen.rows = rows.to_i64
+    gen.arch_rings = arch_rings.to_i64
+    gen.stroke_width = stroke_width
+    gen
+  end
+
+  GENERATOR_NAMES = [
+    "PolkaDotPattern",
+    "StripePattern",
+    "CheckerPattern",
+    "ZigZagPattern",
+    "WavePattern",
+    "RingPattern",
+    "HexagonPattern",
+    "DiamondPattern",
+    "CrossPattern",
+    "StarPattern",
+    "BrickPattern",
+    "HoundstoothPattern",
+    "HalftonePattern",
+    "TruchetPattern",
+    "SpiralPattern",
+    "CellularPattern",
+    "TartanPattern",
+    "CircuitPattern",
+    "ScalesPattern",
+    "CustomPatternGenerator",
+  ]
+
+  def self.generator_names : Array(String)
+    GENERATOR_NAMES
+  end
+
+  def self.generator_count : Int32
+    GENERATOR_NAMES.size
+  end
+
   private def self.lookup_table : Hash(String, Int32)
     if existing = @@lookup
       return existing

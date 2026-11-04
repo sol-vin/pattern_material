@@ -20,3 +20,7 @@ shard.override.yml
 benchmarks/bin/
 benchmarks/reports/
 benchmarks/results/
+
+# Never redistribute FontAwesome Pro icon files in the addon repository
+textures/fontawesome/
+addons/pattern_material/textures/fontawesome/

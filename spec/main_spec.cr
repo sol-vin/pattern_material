@@ -68,7 +68,7 @@ describe "Patterns, Palette, and UniversalMaterial" do
     File.exists?("addons/pattern_material/textures/patterns/moroccan.svg").should be_true
   end
 
-  it "exposes all 32 Afterlife 98 colors in Palette by index and name" do
+  it "exposes all 32 Afterlife 98 colors, 12 curated Themes, and nearest/contrast helpers in Palette" do
     Palette.count.should eq(32)
     Palette[0].r.should be_close(47.0 / 255.0, 0.001)
     Palette[0].g.should be_close(37.0 / 255.0, 0.001)
@@ -77,22 +77,43 @@ describe "Patterns, Palette, and UniversalMaterial" do
     Palette["white"].should eq(Palette[5])
     Palette["hot-watermelon"].should eq(Palette[18])
     Palette["nonexistent"]?.should be_nil
+
+    Palette::Theme.values.size.should eq(12)
+    tc = Palette.theme(:watermelon_punch)
+    tc.fg.should eq(Palette::ColorId::HotWatermelon)
+    tc.bg.should eq(Palette::ColorId::IceAqua)
+    tc.outline.should eq(Palette::ColorId::White)
+    tc.mid.should eq(Palette::ColorId::PeachSorbet)
+
+    Palette.nearest_id(Palette["hot_watermelon"]).should eq(Palette::ColorId::HotWatermelon)
+    Palette.contrast_for("deep_indigo").should eq(Palette["white"])
+    Palette.contrast_for("white").should eq(Palette["deep_indigo"])
   end
 
-  it "configures UniversalMaterial / PatternMaterial parameters fluently across Faces, Glyphs, Patterns, Generators, Palette, and shader effects" do
+  it "configures UniversalMaterial / PatternMaterial parameters fluently across Faces, Glyphs, Patterns, Generators, Palette Themes, and all shader effects" do
     umat = PatternMaterial.new
     umat
       .set_face("smile")
       .set_pattern("moroccan")
-      .set_colors(fg: "hot_watermelon", bg: "ice_aqua", outline: "white", unreplaced: "deep_indigo")
-      .set_3d_surface(UniversalMaterial::ProjectionMode::WorldTriplanar, use_base_texture: true, tile_base_texture: true)
+      .set_theme(:watermelon_punch, use_tritone: true)
+      .set_replace_mask(mode: UniversalMaterial::ReplaceMode::CustomColor, color: "deep_indigo", threshold: 0.25)
+      .set_pattern_blend(mode: UniversalMaterial::BlendMode::Overlay, opacity: 0.9, invert: true)
+      .set_3d_surface(UniversalMaterial::ProjectionMode::Spherical, use_base_texture: true, tile_base_texture: true)
+      .set_transform(scale: 2.0, mirror_tiles: true, kaleidoscope_segments: 6)
+      .set_position_motion(linear_speed: Vector2.new(0.2_f32, 0.1_f32), wave_mode: UniversalMaterial::PositionWaveMode::CircularOrbit)
+      .set_rotation_motion(linear_speed: 0.5, wave_mode: UniversalMaterial::RotationWaveMode::Sin)
+      .set_scale_pulse(wave_mode: UniversalMaterial::ScaleWaveMode::AbsSinBounce)
+      .set_ripple(enabled: true, mode: UniversalMaterial::RippleMode::RadialRipple)
+      .set_time_quantization(enabled: true, fps: 15.0)
       .set_outline(enabled: true, width: 3.5, mode: UniversalMaterial::OutlineMode::Center, boil_amp: 0.2)
       .set_bevel(enabled: true, strength: 0.6)
       .set_fresnel(enabled: true, power: 2.5, invert_pattern: true)
-      .set_drop_shadow(enabled: true)
+      .set_cel_shading(enabled: true, strength: 0.4, bands: 3, dither_light: true)
+      .set_drop_shadow(enabled: true, dither: true, use_pattern: true)
       .set_dither(enabled: true, strength: 0.4, pixel_size: 2.0)
       .set_dissolve(amount: 0.25)
       .set_retro_crt(glitch_intensity: 0.15, scanline_strength: 0.3)
+      .set_surface_fx(pixel_size: 2.0, chromatic_split: 0.012)
       .set_transparency(master_opacity: 0.75, pattern_alpha_affects_surface: true, outline_ignores_master_opacity: true, opacity_dither_enabled: false)
       .set_backdrop_fx(
         blend_mode: UniversalMaterial::BackdropBlendMode::DuotonePaletteMap,
@@ -110,15 +131,33 @@ describe "Patterns, Palette, and UniversalMaterial" do
     umat.get_param?("frame").should eq(86_i64)
     umat.get_param?("custom_pattern").should eq("res://addons/pattern_material/textures/patterns/moroccan.svg")
     umat.get_param?("remap_unreplaced").should eq(true)
-    umat.get_param?("perspective_normals").should eq(2_i64)
+    umat.get_param?("use_mid_color").should eq(true)
+    umat.get_param?("replace_mode").should eq(5_i64)
+    umat.get_param?("pattern_blend_mode").should eq(3_i64)
+    umat.get_param?("invert_pattern").should eq(true)
+    umat.get_param?("perspective_normals").should eq(5_i64)
+    umat.get_param?("kaleidoscope_segments").should eq(6_i64)
+    umat.get_param?("pos_wave_mode").should eq(3_i64)
+    umat.get_param?("rot_wave_mode").should eq(1_i64)
+    umat.get_param?("scale_wave_mode").should eq(3_i64)
+    umat.get_param?("ripple_mode").should eq(2_i64)
+    umat.get_param?("quantize_time").should eq(true)
+    umat.get_param?("time_fps").should eq(15.0)
     umat.get_param?("tile_base_texture").should eq(true)
     umat.get_param?("outline_boil_amp").should eq(0.2)
     umat.get_param?("bevel_enabled").should eq(true)
     umat.get_param?("fresnel_enabled").should eq(true)
+    umat.get_param?("cel_shade_enabled").should eq(true)
+    umat.get_param?("cel_bands").should eq(3_i64)
+    umat.get_param?("cel_dither_light").should eq(true)
     umat.get_param?("shadow_enabled").should eq(true)
+    umat.get_param?("shadow_dither").should eq(true)
+    umat.get_param?("shadow_use_pattern").should eq(true)
     umat.get_param?("dither_enabled").should eq(true)
     umat.get_param?("dissolve_amount").should eq(0.25)
     umat.get_param?("glitch_intensity").should eq(0.15)
+    umat.get_param?("surface_pixel_size").should eq(2.0)
+    umat.get_param?("surface_chromatic_split").should eq(0.012)
     umat.get_param?("master_opacity").should eq(0.75)
     umat.get_param?("pattern_alpha_affects_surface").should eq(true)
     umat.get_param?("outline_ignores_master_opacity").should eq(true)
@@ -131,6 +170,10 @@ describe "Patterns, Palette, and UniversalMaterial" do
     umat.get_param?("vertex_motion_mode").should eq(1_i64)
     umat.get_param?("vertex_snap_enabled").should eq(true)
 
+    tres_str = umat.to_tres
+    tres_str.includes?(%([gd_resource type="ShaderMaterial" format=3])).should be_true
+    tres_str.includes?("shader_parameter/kaleidoscope_segments = 6").should be_true
+
     umat.set_glyph("circle-a")
     umat.get_param?("frame").should eq(10_i64)
     umat.get_param?("hframes").should eq(12_i64)
@@ -140,9 +183,18 @@ describe "Patterns, Palette, and UniversalMaterial" do
     umat.set_generator(dots)
     umat.generator.should eq(dots)
     umat.get_param?("custom_pattern").should eq("PolkaDotPattern")
+
+    UniversalMaterial.cutout_character.get_param?("outline_enabled").should eq(true)
+    UniversalMaterial.sticker_glyph.get_param?("bevel_enabled").should eq(true)
+    UniversalMaterial.retro_hologram.get_param?("glitch_intensity").should eq(0.25)
+    UniversalMaterial.glass_lens.get_param?("backdrop_blend_mode").should eq(5_i64)
+    UniversalMaterial.water_caustics.get_param?("vertex_motion_mode").should eq(1_i64)
+    UniversalMaterial.comic_halftone.get_param?("shadow_use_pattern").should eq(true)
+    UniversalMaterial.enamel_pin_badge.get_param?("bevel_enabled").should eq(true)
+    UniversalMaterial.vhs_glitch_portal.get_param?("kaleidoscope_segments").should eq(8_i64)
   end
 
-  it "includes all universal material uniform groups and presets in addons/pattern_material" do
+  it "includes all universal material uniform groups and 8 presets in addons/pattern_material" do
     shader_code = File.read("addons/pattern_material/shaders/pattern_replace.gdshader")
     shader_code.includes?("uniform bool use_base_texture").should be_true
     shader_code.includes?("uniform bool tile_base_texture").should be_true
@@ -156,7 +208,14 @@ describe "Patterns, Palette, and UniversalMaterial" do
     shader_code.includes?("uniform int backdrop_blend_mode").should be_true
     shader_code.includes?("hint_screen_texture").should be_true
     shader_code.includes?("group_uniforms Vertex_FX;").should be_true
-    shader_code.includes?("World Triplanar:2,Mesh UV:3,Cylindrical:4").should be_true
+    shader_code.includes?("World Triplanar:2,Mesh UV:3,Cylindrical:4,Spherical:5").should be_true
+    shader_code.includes?("uniform int kaleidoscope_segments").should be_true
+    shader_code.includes?("uniform bool use_mid_color").should be_true
+    shader_code.includes?("uniform bool cel_shade_enabled").should be_true
+    shader_code.includes?("uniform float surface_pixel_size").should be_true
+    shader_code.includes?("uniform float surface_chromatic_split").should be_true
+    shader_code.includes?("uniform bool shadow_dither").should be_true
+    shader_code.includes?("uniform bool shadow_use_pattern").should be_true
     shader_code.includes?("max(rgb.r, max(rgb.g, rgb.b))").should be_true
     shader_code.includes?("min(rgb.r, min(rgb.g, rgb.b))").should be_true
     shader_code.includes?("max(rgb.r, rgb.g, rgb.b)").should be_false
@@ -169,9 +228,13 @@ describe "Patterns, Palette, and UniversalMaterial" do
     File.exists?("addons/pattern_material/materials/sticker_glyph.tres").should be_true
     File.exists?("addons/pattern_material/materials/retro_hologram.tres").should be_true
     File.exists?("addons/pattern_material/materials/glass_lens.tres").should be_true
+    File.exists?("addons/pattern_material/materials/water_caustics.tres").should be_true
+    File.exists?("addons/pattern_material/materials/comic_halftone.tres").should be_true
+    File.exists?("addons/pattern_material/materials/enamel_pin_badge.tres").should be_true
+    File.exists?("addons/pattern_material/materials/vhs_glitch_portal.tres").should be_true
   end
 
-  it "registers PatternMaterialPlugin, PatternShaderMaterial, PatternGeneratorTool, and all 14 PatternGenerator resources with custom Export properties" do
+  it "registers PatternMaterialPlugin, PatternShaderMaterial, PatternGeneratorTool, PatternMaterialAnimator, and all 20 PatternGenerator resources with custom Export properties" do
     plugin_entry = Godot::ClassRegistry.find("PatternMaterialPlugin")
     plugin_entry.should_not be_nil
     plugin_entry.not_nil!.parent_name.should eq("EditorPlugin")
@@ -187,29 +250,18 @@ describe "Patterns, Palette, and UniversalMaterial" do
     tool_entry.not_nil!.parent_name.should eq("Node")
     tool_entry.not_nil!.is_tool.should be_true
 
+    anim_entry = Godot::ClassRegistry.find("PatternMaterialAnimator")
+    anim_entry.should_not be_nil
+    anim_entry.not_nil!.parent_name.should eq("Node")
+    anim_entry.not_nil!.is_tool.should be_true
+
     base_gen = Godot::ClassRegistry.find("PatternGenerator")
     base_gen.should_not be_nil
     base_gen.not_nil!.parent_name.should eq("ImageTexture")
     base_gen.not_nil!.is_tool.should be_true
 
-    generator_classes = [
-      "PolkaDotPattern",
-      "StripePattern",
-      "CheckerPattern",
-      "ZigZagPattern",
-      "WavePattern",
-      "RingPattern",
-      "HexagonPattern",
-      "DiamondPattern",
-      "CrossPattern",
-      "StarPattern",
-      "BrickPattern",
-      "HoundstoothPattern",
-      "HalftonePattern",
-      "CustomPatternGenerator",
-    ]
-
-    generator_classes.each do |cls_name|
+    Patterns.generator_count.should eq(20)
+    Patterns.generator_names.each do |cls_name|
       entry = Godot::ClassRegistry.find(cls_name)
       entry.should_not be_nil
       entry.not_nil!.parent_name.should eq("PatternGenerator")
@@ -218,7 +270,7 @@ describe "Patterns, Palette, and UniversalMaterial" do
     end
   end
 
-  it "generates valid repeating black-and-white SVGs across all 14 procedural pattern generators" do
+  it "generates valid repeating black-and-white SVGs across all 20 procedural pattern generators" do
     polka = Patterns.polka_dots(dot_radius: 14.0, columns: 3, rows: 3, stagger: true, ring_thickness: 0.0)
     polka_svg = polka.to_svg
     polka_svg.includes?(%(<svg xmlns="http://www.w3.org/2000/svg")).should be_true
@@ -266,11 +318,57 @@ describe "Patterns, Palette, and UniversalMaterial" do
     halftone = Patterns.halftone(columns: 6, rows: 6, min_radius: 2.0, max_radius: 8.0, radial_falloff: true)
     halftone.to_svg.includes?(%(<circle )).should be_true
 
+    truchet = Patterns.truchet(columns: 4, rows: 4, stroke_width: 5.0, curved_arcs: true)
+    truchet.to_svg.includes?(%( A )).should be_true
+    truchet_maze = Patterns.truchet(columns: 4, rows: 4, stroke_width: 5.0, curved_arcs: false)
+    truchet_maze.to_svg.includes?(%(<line )).should be_true
+
+    spirals = Patterns.spirals(columns: 2, rows: 2, turns: 2.5, arms: 2)
+    spirals.to_svg.includes?(%(<path d="M )).should be_true
+
+    cellular = Patterns.cellular(columns: 4, rows: 4, rounded: true)
+    cellular.to_svg.includes?(%( Q )).should be_true
+
+    tartan = Patterns.tartan(subdivisions: 2, main_band_width: 14.0, accent_band_width: 4.0)
+    tartan.to_svg.includes?(%(<rect )).should be_true
+
+    circuit = Patterns.circuit(columns: 4, rows: 4, trace_width: 3.0, pad_radius: 5.0)
+    circuit.to_svg.includes?(%(<circle )).should be_true
+
+    scales = Patterns.scales(columns: 2, rows: 2, arch_rings: 3)
+    scales.to_svg.includes?(%(<circle )).should be_true
+
     CustomPatternGenerator::PatternKind.each do |kind|
       custom = Patterns.custom(kind: kind, columns: 2, rows: 2, primary_size: 16.0, secondary_size: 4.0)
       svg = custom.to_svg
       svg.starts_with?("<svg ").should be_true
       svg.ends_with?("</svg>\n").should be_true
     end
+  end
+
+  it "animates flipbook frame sequences, palette theme cycles, and dissolve transitions in PatternMaterialAnimator" do
+    anim = PatternMaterialAnimator.new
+    anim.flipbook_enabled = true
+    anim.atlas_source = PatternMaterialAnimator::AtlasSource::Faces
+    anim.frame_keys_csv = "angry,smile,laugh"
+    anim.flipbook_fps = 2.0
+    anim.resolved_frame_indices.should eq([Faces["angry"], Faces["smile"], Faces["laugh"]])
+    anim.current_flipbook_frame_index.should eq(Faces["angry"])
+
+    anim.step_animation(0.5)
+    anim.current_flipbook_frame_index.should eq(Faces["smile"])
+
+    anim.palette_cycle_enabled = true
+    anim.cycle_themes_csv = "watermelon_punch,cyber_mint"
+    fg, bg = anim.current_cycled_colors
+    fg.a.should be_close(1.0, 0.001)
+    bg.a.should be_close(1.0, 0.001)
+
+    anim.dissolve_duration = 1.0
+    anim.dissolve_out!
+    anim.step_animation(0.5)
+    anim.dissolve_current.should be_close(0.5, 0.01)
+    anim.step_animation(0.6)
+    anim.dissolve_current.should be_close(1.0, 0.01)
   end
 end

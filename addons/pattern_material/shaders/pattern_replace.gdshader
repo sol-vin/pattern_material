@@ -87,6 +87,16 @@ uniform float fresnel_power : hint_range(0.5, 8.0, 0.1) = 2.5;
 uniform vec4 fresnel_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 /** When true, dynamically inverts the pattern FG/BG colors inside the Fresnel rim band. */
 uniform bool fresnel_invert_pattern = false;
+/** Enables 3D directional Cel / Toon lighting across curved 3D geometry. */
+uniform bool cel_shade_enabled = false;
+/** World-space directional light vector for 3D Cel shading. */
+uniform vec3 cel_light_dir = vec3(0.4, 0.8, 0.5);
+/** Darkening/brightening intensity of the 3D Cel shading bands. */
+uniform float cel_shade_strength : hint_range(0.0, 1.0, 0.01) = 0.35;
+/** Number of discrete toon lighting bands (1..8). */
+uniform int cel_bands : hint_range(1, 8, 1) = 2;
+/** When true, applies 4x4 Bayer dithering across 3D Cel lighting transitions (Obra Dinn / 90s 3D look). */
+uniform bool cel_dither_light = false;
 group_uniforms;
 
 // ============================================================================
@@ -99,6 +109,10 @@ uniform bool shadow_enabled = false;
 uniform vec4 shadow_color : source_color = vec4(0.184314, 0.145098, 0.337255, 1.0);
 /** Shadow offset in texture texels (when outline_scaling is true) or screen pixels (when false). */
 uniform vec2 shadow_offset = vec2(4.0, -4.0);
+/** Applies 4x4 Bayer screen-door dithering to the drop shadow. */
+uniform bool shadow_dither = false;
+/** Masks the drop shadow with the active pattern for a comic hatched shadow effect. */
+uniform bool shadow_use_pattern = false;
 group_uniforms;
 
 // ============================================================================
@@ -115,6 +129,12 @@ uniform float threshold : hint_range(0.01, 1.0, 0.01) = 0.5;
 uniform vec4 fg_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 /** Replaces black pixels in the black-and-white pattern. */
 uniform vec4 bg_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+/** Enables a 3-color tritone ramp (bg_color -> mid_color -> fg_color) across pattern luminance. */
+uniform bool use_mid_color = false;
+/** Middle palette color used when use_mid_color is enabled. */
+uniform vec4 mid_color : source_color = vec4(0.5, 0.5, 0.5, 1.0);
+/** Luminance midpoint (0.05..0.95) for the 3-color tritone ramp. */
+uniform float mid_point : hint_range(0.05, 0.95, 0.01) = 0.5;
 /** Swaps black and white in the sampled pattern before applying FG/BG colors. */
 uniform bool invert_pattern = false;
 /** Blend mode used when compositing the pattern onto the matched region. */
@@ -124,8 +144,8 @@ uniform float pattern_opacity : hint_range(0.0, 1.0, 0.01) = 1.0;
 group_uniforms;
 
 group_uniforms Pattern.Transform_Base;
-/** Perspective Normals: Camera (0), Model Normals (1), World Triplanar (2), Mesh UV (3), or Cylindrical (4). */
-uniform int perspective_normals : hint_enum("Camera:0,Model Normals:1,World Triplanar:2,Mesh UV:3,Cylindrical:4") = 0;
+/** Perspective Normals: Camera (0), Model Normals (1), World Triplanar (2), Mesh UV (3), Cylindrical (4), or Spherical (5). */
+uniform int perspective_normals : hint_enum("Camera:0,Model Normals:1,World Triplanar:2,Mesh UV:3,Cylindrical:4,Spherical:5") = 0;
 /** Scaling vs nonscaling: when true, getting close makes the texture scale. */
 uniform bool scaling = true;
 /** Scale factor mult (1x). */
@@ -142,6 +162,8 @@ uniform bool flip_x = false;
 uniform bool flip_y = false;
 /** Mirror every alternate tile for seamless kaleidoscopic tiling. */
 uniform bool mirror_tiles = false;
+/** Folds pattern UVs into N-fold radial kaleidoscope symmetry (0 or 1 = disabled, 2..24 = radial sectors). */
+uniform int kaleidoscope_segments : hint_range(0, 24, 1) = 0;
 group_uniforms;
 
 group_uniforms Pattern.Position_Motion;
@@ -221,6 +243,10 @@ uniform float scanline_strength : hint_range(0.0, 1.0, 0.01) = 0.0;
 uniform float scanline_density : hint_range(10.0, 480.0, 1.0) = 120.0;
 /** Self-illumination / emission multiplier for WorldEnvironment glow/bloom (0 = unlit albedo only). */
 uniform float emission_strength : hint_range(0.0, 8.0, 0.05) = 0.0;
+/** Quantizes surface & pattern UVs into chunky retro pixel blocks (1.0 = disabled, 2..64 = pixel block size). */
+uniform float surface_pixel_size : hint_range(1.0, 64.0, 1.0) = 1.0;
+/** Prismatic RGB channel split applied directly to the surface pattern (0.0 = disabled). */
+uniform float surface_chromatic_split : hint_range(0.0, 0.1, 0.001) = 0.0;
 group_uniforms;
 
 // ============================================================================
@@ -437,7 +463,7 @@ vec2 compute_pattern_uv_full(
   float cam_depth = max(-view_pos.z, 0.0001);
   vec2 uv;
 
-  // 1. 3D Projection (Camera / Model Normals / World Triplanar / Mesh UV / Cylindrical)
+  // 1. 3D Projection (Camera / Model Normals / World Triplanar / Mesh UV / Cylindrical / Spherical)
   if (perspective_normals == 0) {
     if (scaling) {
       uv = (view_pos.xy - node_view_center.xy);
@@ -453,10 +479,33 @@ vec2 compute_pattern_uv_full(
   } else if (perspective_normals == 3) {
     vec2 centered_mesh_uv = mesh_uv - vec2(0.5);
     uv = scaling ? centered_mesh_uv : (centered_mesh_uv * cam_depth);
-  } else {
+  } else if (perspective_normals == 4) {
     float angle_u = atan(local_pos.x, local_pos.z) / (2.0 * PI);
     vec2 cyl_uv = vec2(angle_u, local_pos.y);
     uv = scaling ? cyl_uv : (cyl_uv * cam_depth);
+  } else {
+    // 5 = Spherical (Equirectangular lat/lon mapping around local origin)
+    vec3 dir = normalize(local_pos + vec3(0.0, 0.0, 0.00001));
+    float lon = atan(dir.x, dir.z) / (2.0 * PI);
+    float lat = asin(clamp(dir.y, -1.0, 1.0)) / PI;
+    vec2 sph_uv = vec2(lon, lat);
+    uv = scaling ? sph_uv : (sph_uv * cam_depth);
+  }
+
+  // Optional Surface Pixelation (quantize base projection coordinates before transforms)
+  if (surface_pixel_size > 1.0) {
+    float grid_res = max(256.0 / surface_pixel_size, 4.0);
+    uv = (floor(uv * grid_res) + vec2(0.5)) / grid_res;
+  }
+
+  // Optional Kaleidoscope N-Fold Radial Symmetry
+  if (kaleidoscope_segments > 1) {
+    float r = length(uv);
+    float a = atan(uv.y, uv.x);
+    float seg_angle = (2.0 * PI) / float(kaleidoscope_segments);
+    a = mod(a, seg_angle);
+    a = abs(a - seg_angle * 0.5);
+    uv = vec2(cos(a), sin(a)) * r;
   }
 
   // 2. Flip X / Y
@@ -563,18 +612,39 @@ vec2 compute_pattern_uv_full(
 }
 
 /**
- * Samples the black-and-white pattern, optionally inverts it, and maps black -> bg_color, white -> fg_color.
+ * Samples the black-and-white pattern, optionally inverts it, and maps black -> bg_color, white -> fg_color
+ * (or bg_color -> mid_color -> fg_color when use_mid_color is enabled).
  */
 vec4 evaluate_pattern_color(vec4 pat_sample, vec4 fg_col, vec4 bg_col, bool inv_pat, float bayer_val) {
   float pat_bw = dot(pat_sample.rgb, vec3(0.299, 0.587, 0.114));
   if (dither_enabled) {
     pat_bw = clamp(pat_bw + (bayer_val - 0.5) * dither_strength, 0.0, 1.0);
   }
-  if (hard_edges) {
-    pat_bw = step(0.5, pat_bw);
-  }
   if (inv_pat) {
     pat_bw = 1.0 - pat_bw;
+  }
+  if (use_mid_color) {
+    float mp = clamp(mid_point, 0.05, 0.95);
+    if (hard_edges) {
+      float low_cut = mp * 0.65;
+      float high_cut = mp + (1.0 - mp) * 0.35;
+      if (pat_bw < low_cut) {
+        return bg_col;
+      } else if (pat_bw < high_cut) {
+        return mid_color;
+      } else {
+        return fg_col;
+      }
+    } else {
+      if (pat_bw < mp) {
+        return mix(bg_col, mid_color, clamp(pat_bw / mp, 0.0, 1.0));
+      } else {
+        return mix(mid_color, fg_col, clamp((pat_bw - mp) / max(1.0 - mp, 0.001), 0.0, 1.0));
+      }
+    }
+  }
+  if (hard_edges) {
+    pat_bw = step(0.5, pat_bw);
   }
   return mix(bg_col, fg_col, pat_bw);
 }
@@ -831,13 +901,31 @@ void fragment() {
     discard;
   }
 
-  bool need_bayer = dither_enabled || opacity_dither_enabled || dissolve_amount > 0.0;
+  bool need_bayer = dither_enabled || opacity_dither_enabled || shadow_dither || cel_dither_light || dissolve_amount > 0.0;
   float bayer_val = need_bayer ? eval_bayer4x4(SCREEN_UV * VIEWPORT_SIZE) : 0.5;
   vec2 p_uv = compute_pattern_uv_full(
     UV, v_local_pos, v_local_normal, v_world_pos, v_world_normal,
     VERTEX, v_node_view_center, SCREEN_UV, VIEWPORT_SIZE, TIME
   );
   vec4 pat = textureLod(custom_pattern, p_uv, 0.0);
+  if (surface_chromatic_split > 0.0001) {
+    vec2 split_ofs = vec2(surface_chromatic_split, surface_chromatic_split * 0.35);
+    float pat_r = dot(textureLod(custom_pattern, p_uv + split_ofs, 0.0).rgb, vec3(0.299, 0.587, 0.114));
+    float pat_b = dot(textureLod(custom_pattern, p_uv - split_ofs, 0.0).rgb, vec3(0.299, 0.587, 0.114));
+    pat.r = pat_r;
+    pat.b = pat_b;
+  }
+
+  // Optional Dithered or Pattern-Hatched Drop Shadow
+  if (shadow_alpha > 0.0) {
+    if (shadow_use_pattern) {
+      float sh_pat_bw = step(0.5, dot(pat.rgb, vec3(0.299, 0.587, 0.114)));
+      shadow_alpha *= sh_pat_bw;
+    }
+    if (shadow_dither && shadow_alpha * 0.5 <= bayer_val) {
+      shadow_alpha = 0.0;
+    }
+  }
 
   // Check Pattern-Driven Dissolve before shading
   float dissolve_rim = 0.0;
@@ -927,6 +1015,21 @@ void fragment() {
     // Apply 3D Fresnel color tint when not purely inverting the pattern
     if (fresnel_enabled && !fresnel_invert_pattern && fresnel_factor > 0.0) {
       final_col.rgb = mix(final_col.rgb, fresnel_color.rgb, fresnel_factor * fresnel_color.a);
+    }
+
+    // Apply 3D Directional Cel / Toon Lighting when enabled
+    if (cel_shade_enabled) {
+      vec3 l_dir = normalize(cel_light_dir + vec3(0.0, 0.0001, 0.0));
+      float ndotl = dot(normalize(v_world_normal), l_dir) * 0.5 + 0.5;
+      if (cel_dither_light) {
+        ndotl = clamp(ndotl + (bayer_val - 0.5) * (1.0 / float(max(cel_bands, 1))), 0.0, 1.0);
+      }
+      float bands_f = float(max(cel_bands, 1));
+      float cel_val = floor(ndotl * bands_f) / max(bands_f - 1.0, 1.0);
+      cel_val = clamp(cel_val, 0.0, 1.0);
+      vec3 shadow_tint = final_col.rgb * (1.0 - cel_shade_strength);
+      vec3 light_tint = mix(final_col.rgb, vec3(1.0), cel_shade_strength * 0.45);
+      final_col.rgb = mix(shadow_tint, light_tint, cel_val);
     }
   }
 

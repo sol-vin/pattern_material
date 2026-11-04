@@ -1,4 +1,9 @@
 # PATTERN MATERIAL CHANGELOG
+## [0.1.3] - 2026-11-04
+### 🐛 Bug Fixes
+- ✓ **[CI]** add libxml2-dev and -Wl,--undefined-version for Linux shared library linking ([`940a1b3`](https://github.com/sol-vin/pattern_material/commit/940a1b3))
+
+---
 ## [0.1.2] - 2026-10-21
 ### 🐛 Bug Fixes
 - ✓ **[CI]** add libxml2-dev and -Wl,--undefined-version for Linux shared library linking ([`fc0bdd6`](https://github.com/sol-vin/pattern_material/commit/fc0bdd6))

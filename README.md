@@ -1,7 +1,7 @@
 # Pattern Material for Lapis 🎨
 
 <!-- carbon:badges -->
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/sol-vin/pattern_material/releases)
+[![Version](https://img.shields.io/badge/version-0.1.3-blue.svg)](https://github.com/sol-vin/pattern_material/releases)
 [![Crystal](https://img.shields.io/badge/crystal-%3E%3D%201.10.0-black.svg)](https://crystal-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Godot](https://img.shields.io/badge/Godot-4.8+-478CBF.svg?logo=godotengine)](https://godotengine.org)
@@ -92,7 +92,7 @@ Or add `pattern_material` to your project's `shard.yml`:
 dependencies:
   lapis:
     github: sol-vin/lapis
-    branch: 4.8-beta1
+    branch: 4.8-beta2
   pattern_material:
     github: sol-vin/pattern_material
     branch: main

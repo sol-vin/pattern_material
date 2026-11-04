@@ -10,11 +10,12 @@ require "./tools/svg_spritesheet_builder"
 require "./tools/faces_spritesheet_builder"
 require "./tools/fontawesome_category_importer"
 require "./tools/pattern_generator_node"
+require "./tools/pattern_material_animator"
 
 include Godot
 
 module PatternMaterialAddon
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
 end
 
 # Godot EditorPlugin entry point for the `pattern_material` addon.
@@ -27,7 +28,7 @@ node PatternMaterialPlugin < EditorPlugin do
     Godot.print("==================================================================")
     Godot.print("  [LapisAddon] [PatternMaterialPlugin] Plugin activated in Godot Editor!")
     Godot.print("  [CRYSTAL_ADDON_VERIFIED_SUCCESS_8A3F1E] Pattern Material GDExtension plugin running in editor!")
-    Godot.print("  [PatternMaterial] Shader: #{SHADER_PATH} | Patterns: #{Patterns.count} | Generators: 14")
+    Godot.print("  [PatternMaterial] Shader: #{SHADER_PATH} | Patterns: #{Patterns.count} | Generators: #{Patterns.generator_count} | Themes: #{Palette::Theme.values.size}")
     Godot.print("==================================================================")
   end
 

@@ -939,8 +939,520 @@ resource HalftonePattern < PatternGenerator do
   end
 end
 
+# Procedural Smith Arc & Diagonal Maze Truchet tile pattern generator.
+@[Tool]
+resource TruchetPattern < PatternGenerator do
+  @[Export(range: 1..16, step: 1)]
+  property columns : Int64 = 4_i64
+
+  @[Export(range: 1..16, step: 1)]
+  property rows : Int64 = 4_i64
+
+  @[Export(range: 1.0..30.0, step: 0.5)]
+  property stroke_width : Float64 = 6.0
+
+  @[Export(range: 0..9999, step: 1)]
+  property seed : Int64 = 42_i64
+
+  @[Export]
+  property curved_arcs : Bool = true
+
+  def columns=(val : Int64)
+    return if @columns == val
+    @columns = val
+    refresh_texture!
+  end
+
+  def rows=(val : Int64)
+    return if @rows == val
+    @rows = val
+    refresh_texture!
+  end
+
+  def stroke_width=(val : Float64)
+    return if @stroke_width == val
+    @stroke_width = val
+    refresh_texture!
+  end
+
+  def seed=(val : Int64)
+    return if @seed == val
+    @seed = val
+    refresh_texture!
+  end
+
+  def curved_arcs=(val : Bool)
+    return if @curved_arcs == val
+    @curved_arcs = val
+    refresh_texture!
+  end
+
+  def build_svg_body(io : IO, size : Float64, fg : String, bg : String) : Void
+    cols = Math.max(@columns.to_i32, 1)
+    rws = Math.max(@rows.to_i32, 1)
+    cell_w = size / cols
+    cell_h = size / rws
+    rx = cell_w * 0.5
+    ry = cell_h * 0.5
+    sw = Math.max(@stroke_width, 1.0)
+    sd = @seed.to_i64
+
+    (0...rws).each do |row|
+      y0 = row * cell_h
+      ym = y0 + ry
+      y1 = y0 + cell_h
+      (0...cols).each do |col|
+        x0 = col * cell_w
+        xm = x0 + rx
+        x1 = x0 + cell_w
+        h = ((col.to_i64 * 73856093_i64) ^ (row.to_i64 * 19349663_i64) ^ (sd * 83492791_i64)).abs
+        flipped = (h & 1_i64) == 1_i64
+
+        if @curved_arcs
+          if flipped
+            d1 = "M #{fmt(xm)} #{fmt(y0)} A #{fmt(rx)} #{fmt(ry)} 0 0 0 #{fmt(x1)} #{fmt(ym)}"
+            d2 = "M #{fmt(x0)} #{fmt(ym)} A #{fmt(rx)} #{fmt(ry)} 0 0 1 #{fmt(xm)} #{fmt(y1)}"
+          else
+            d1 = "M #{fmt(x0)} #{fmt(ym)} A #{fmt(rx)} #{fmt(ry)} 0 0 0 #{fmt(xm)} #{fmt(y0)}"
+            d2 = "M #{fmt(xm)} #{fmt(y1)} A #{fmt(rx)} #{fmt(ry)} 0 0 0 #{fmt(x1)} #{fmt(ym)}"
+          end
+          io << %(  <path d="#{d1}" fill="none" stroke="#{fg}" stroke-width="#{fmt(sw)}" stroke-linecap="round"/>\n)
+          io << %(  <path d="#{d2}" fill="none" stroke="#{fg}" stroke-width="#{fmt(sw)}" stroke-linecap="round"/>\n)
+        else
+          if flipped
+            io << %(  <line x1="#{fmt(x0)}" y1="#{fmt(y1)}" x2="#{fmt(x1)}" y2="#{fmt(y0)}" stroke="#{fg}" stroke-width="#{fmt(sw)}" stroke-linecap="round"/>\n)
+          else
+            io << %(  <line x1="#{fmt(x0)}" y1="#{fmt(y0)}" x2="#{fmt(x1)}" y2="#{fmt(y1)}" stroke="#{fg}" stroke-width="#{fmt(sw)}" stroke-linecap="round"/>\n)
+          end
+        end
+      end
+    end
+  end
+end
+
+# Procedural Multi-Arm Archimedean Spiral / Hypnotic Vortex grid pattern generator.
+@[Tool]
+resource SpiralPattern < PatternGenerator do
+  @[Export(range: 1..16, step: 1)]
+  property columns : Int64 = 2_i64
+
+  @[Export(range: 1..16, step: 1)]
+  property rows : Int64 = 2_i64
+
+  @[Export(range: 0.5..6.0, step: 0.25)]
+  property turns : Float64 = 2.0
+
+  @[Export(range: 1..6, step: 1)]
+  property arms : Int64 = 2_i64
+
+  @[Export(range: 1.0..25.0, step: 0.5)]
+  property stroke_width : Float64 = 4.0
+
+  def columns=(val : Int64)
+    return if @columns == val
+    @columns = val
+    refresh_texture!
+  end
+
+  def rows=(val : Int64)
+    return if @rows == val
+    @rows = val
+    refresh_texture!
+  end
+
+  def turns=(val : Float64)
+    return if @turns == val
+    @turns = val
+    refresh_texture!
+  end
+
+  def arms=(val : Int64)
+    return if @arms == val
+    @arms = val
+    refresh_texture!
+  end
+
+  def stroke_width=(val : Float64)
+    return if @stroke_width == val
+    @stroke_width = val
+    refresh_texture!
+  end
+
+  def build_svg_body(io : IO, size : Float64, fg : String, bg : String) : Void
+    cols = Math.max(@columns.to_i32, 1)
+    rws = Math.max(@rows.to_i32, 1)
+    cell_w = size / cols
+    cell_h = size / rws
+    max_r = Math.min(cell_w, cell_h) * 0.44
+    arm_count = Math.max(@arms.to_i32, 1)
+    sw = Math.max(@stroke_width, 1.0)
+    steps = 28
+
+    (0...rws).each do |row|
+      cy = (row + 0.5) * cell_h
+      (0...cols).each do |col|
+        cx = (col + 0.5) * cell_w
+        (0...arm_count).each do |arm|
+          base_angle = (arm.to_f64 * 2.0 * Math::PI) / arm_count
+          d = String.build do |s|
+            (0..steps).each do |step|
+              t = step.to_f64 / steps
+              r = max_r * t
+              ang = base_angle + t * @turns * 2.0 * Math::PI
+              px = cx + r * Math.cos(ang)
+              py = cy + r * Math.sin(ang)
+              s << (step == 0 ? "M " : " L ") << fmt(px) << " " << fmt(py)
+            end
+          end
+          io << %(  <path d="#{d}" fill="none" stroke="#{fg}" stroke-width="#{fmt(sw)}" stroke-linecap="round" stroke-linejoin="round"/>\n)
+        end
+      end
+    end
+  end
+end
+
+# Procedural Voronoi / Cellular Caustics / Cobblestone pattern generator.
+@[Tool]
+resource CellularPattern < PatternGenerator do
+  @[Export(range: 2..16, step: 1)]
+  property columns : Int64 = 4_i64
+
+  @[Export(range: 2..16, step: 1)]
+  property rows : Int64 = 4_i64
+
+  @[Export(range: 0.0..0.9, step: 0.05)]
+  property jitter : Float64 = 0.45
+
+  @[Export(range: 0.2..0.95, step: 0.05)]
+  property cell_scale : Float64 = 0.72
+
+  @[Export(range: 0..9999, step: 1)]
+  property seed : Int64 = 17_i64
+
+  @[Export]
+  property rounded : Bool = true
+
+  def columns=(val : Int64)
+    return if @columns == val
+    @columns = val
+    refresh_texture!
+  end
+
+  def rows=(val : Int64)
+    return if @rows == val
+    @rows = val
+    refresh_texture!
+  end
+
+  def jitter=(val : Float64)
+    return if @jitter == val
+    @jitter = val
+    refresh_texture!
+  end
+
+  def cell_scale=(val : Float64)
+    return if @cell_scale == val
+    @cell_scale = val
+    refresh_texture!
+  end
+
+  def seed=(val : Int64)
+    return if @seed == val
+    @seed = val
+    refresh_texture!
+  end
+
+  def rounded=(val : Bool)
+    return if @rounded == val
+    @rounded = val
+    refresh_texture!
+  end
+
+  def build_svg_body(io : IO, size : Float64, fg : String, bg : String) : Void
+    cols = Math.max(@columns.to_i32, 2)
+    rws = Math.max(@rows.to_i32, 2)
+    cell_w = size / cols
+    cell_h = size / rws
+    jit = @jitter.clamp(0.0, 0.9)
+    sc = @cell_scale.clamp(0.2, 0.95)
+    sd = @seed.to_i64
+
+    (-1..rws).each do |row|
+      (-1..cols).each do |col|
+        wx = (col % cols + cols) % cols
+        wy = (row % rws + rws) % rws
+        h1 = ((wx.to_i64 * 374761393_i64) + (wy.to_i64 * 668265263_i64) + sd * 144269504_i64).abs
+        h2 = ((wx.to_i64 * 1103515245_i64) + (wy.to_i64 * 12345_i64) + sd * 2654435761_i64).abs
+        jx = (((h1 % 1000) / 500.0) - 1.0) * jit * cell_w * 0.35
+        jy = (((h2 % 1000) / 500.0) - 1.0) * jit * cell_h * 0.35
+
+        cx = (col + 0.5) * cell_w + jx
+        cy = (row + 0.5) * cell_h + jy
+        rx = cell_w * 0.5 * sc
+        ry = cell_h * 0.5 * sc
+        next if cx + rx < 0.0 || cx - rx > size || cy + ry < 0.0 || cy - ry > size
+
+        pts = (0...6).map do |i|
+          ang = (i.to_f64 * Math::PI / 3.0) + ((h1 % 60).to_f64 * Math::PI / 180.0)
+          vr = 0.82 + (((h2 >> (i * 2)) & 3).to_f64 * 0.08)
+          px = cx + rx * vr * Math.cos(ang)
+          py = cy + ry * vr * Math.sin(ang)
+          {px, py}
+        end
+
+        if @rounded
+          d = String.build do |s|
+            m0x = (pts[5][0] + pts[0][0]) * 0.5
+            m0y = (pts[5][1] + pts[0][1]) * 0.5
+            s << "M #{fmt(m0x)} #{fmt(m0y)}"
+            (0...6).each do |i|
+              nxt = pts[(i + 1) % 6]
+              mx = (pts[i][0] + nxt[0]) * 0.5
+              my = (pts[i][1] + nxt[1]) * 0.5
+              s << " Q #{fmt(pts[i][0])} #{fmt(pts[i][1])}, #{fmt(mx)} #{fmt(my)}"
+            end
+            s << " Z"
+          end
+          io << %(  <path d="#{d}" fill="#{fg}"/>\n)
+        else
+          poly = pts.map { |px, py| "#{fmt(px)},#{fmt(py)}" }.join(" ")
+          io << %(  <polygon points="#{poly}" fill="#{fg}"/>\n)
+        end
+      end
+    end
+  end
+end
+
+# Procedural Multi-Band Scottish Tartan / Flannel Plaid pattern generator.
+@[Tool]
+resource TartanPattern < PatternGenerator do
+  @[Export(range: 1..8, step: 1)]
+  property subdivisions : Int64 = 2_i64
+
+  @[Export(range: 2.0..40.0, step: 0.5)]
+  property main_band_width : Float64 = 16.0
+
+  @[Export(range: 1.0..20.0, step: 0.5)]
+  property accent_band_width : Float64 = 4.0
+
+  @[Export]
+  property diagonal_twill : Bool = true
+
+  def subdivisions=(val : Int64)
+    return if @subdivisions == val
+    @subdivisions = val
+    refresh_texture!
+  end
+
+  def main_band_width=(val : Float64)
+    return if @main_band_width == val
+    @main_band_width = val
+    refresh_texture!
+  end
+
+  def accent_band_width=(val : Float64)
+    return if @accent_band_width == val
+    @accent_band_width = val
+    refresh_texture!
+  end
+
+  def diagonal_twill=(val : Bool)
+    return if @diagonal_twill == val
+    @diagonal_twill = val
+    refresh_texture!
+  end
+
+  def build_svg_body(io : IO, size : Float64, fg : String, bg : String) : Void
+    subs = Math.max(@subdivisions.to_i32, 1)
+    tile = size / subs
+    main_w = Math.min(@main_band_width, tile * 0.45)
+    acc_w = Math.min(@accent_band_width, tile * 0.2)
+
+    (0...subs).each do |i|
+      base = i * tile
+      center = base + tile * 0.5
+      m_start = center - main_w * 0.5
+      a1 = base + tile * 0.15 - acc_w * 0.5
+      a2 = base + tile * 0.85 - acc_w * 0.5
+
+      # Vertical warp bands
+      io << %(  <rect x="#{fmt(m_start)}" y="0" width="#{fmt(main_w)}" height="#{fmt(size)}" fill="#{fg}"/>\n)
+      io << %(  <rect x="#{fmt(a1)}" y="0" width="#{fmt(acc_w)}" height="#{fmt(size)}" fill="#{fg}"/>\n)
+      io << %(  <rect x="#{fmt(a2)}" y="0" width="#{fmt(acc_w)}" height="#{fmt(size)}" fill="#{fg}"/>\n)
+
+      # Horizontal weft bands
+      io << %(  <rect x="0" y="#{fmt(m_start)}" width="#{fmt(size)}" height="#{fmt(main_w)}" fill="#{fg}"/>\n)
+      io << %(  <rect x="0" y="#{fmt(a1)}" width="#{fmt(size)}" height="#{fmt(acc_w)}" fill="#{fg}"/>\n)
+      io << %(  <rect x="0" y="#{fmt(a2)}" width="#{fmt(size)}" height="#{fmt(acc_w)}" fill="#{fg}"/>\n)
+    end
+
+    if @diagonal_twill
+      (0...subs).each do |row|
+        cy = (row + 0.5) * tile
+        (0...subs).each do |col|
+          cx = (col + 0.5) * tile
+          io << %(  <rect x="#{fmt(cx - acc_w)}" y="#{fmt(cy - acc_w)}" width="#{fmt(acc_w * 2.0)}" height="#{fmt(acc_w * 2.0)}" fill="#{bg}"/>\n)
+        end
+      end
+    end
+  end
+end
+
+# Procedural PCB Circuit Board Traces & Via Pads pattern generator.
+@[Tool]
+resource CircuitPattern < PatternGenerator do
+  @[Export(range: 2..16, step: 1)]
+  property columns : Int64 = 4_i64
+
+  @[Export(range: 2..16, step: 1)]
+  property rows : Int64 = 4_i64
+
+  @[Export(range: 1.0..15.0, step: 0.5)]
+  property trace_width : Float64 = 3.5
+
+  @[Export(range: 2.0..20.0, step: 0.5)]
+  property pad_radius : Float64 = 6.0
+
+  @[Export(range: 0..9999, step: 1)]
+  property seed : Int64 = 98_i64
+
+  def columns=(val : Int64)
+    return if @columns == val
+    @columns = val
+    refresh_texture!
+  end
+
+  def rows=(val : Int64)
+    return if @rows == val
+    @rows = val
+    refresh_texture!
+  end
+
+  def trace_width=(val : Float64)
+    return if @trace_width == val
+    @trace_width = val
+    refresh_texture!
+  end
+
+  def pad_radius=(val : Float64)
+    return if @pad_radius == val
+    @pad_radius = val
+    refresh_texture!
+  end
+
+  def seed=(val : Int64)
+    return if @seed == val
+    @seed = val
+    refresh_texture!
+  end
+
+  def build_svg_body(io : IO, size : Float64, fg : String, bg : String) : Void
+    cols = Math.max(@columns.to_i32, 2)
+    rws = Math.max(@rows.to_i32, 2)
+    cell_w = size / cols
+    cell_h = size / rws
+    tw = Math.max(@trace_width, 1.0)
+    pr = Math.max(@pad_radius, tw * 0.75)
+    hole_r = pr * 0.45
+    sd = @seed.to_i64
+
+    (0...rws).each do |row|
+      cy = (row + 0.5) * cell_h
+      (0...cols).each do |col|
+        cx = (col + 0.5) * cell_w
+        h = ((col.to_i64 * 92837111_i64) ^ (row.to_i64 * 689287499_i64) ^ (sd * 283923481_i64)).abs
+        mode = h % 4
+
+        case mode
+        when 0
+          # Horizontal + 45-degree bend to top-right
+          io << %(  <path d="M #{fmt(col * cell_w)} #{fmt(cy)} L #{fmt(cx)} #{fmt(cy)} L #{fmt((col + 1) * cell_w)} #{fmt(row * cell_h)}" fill="none" stroke="#{fg}" stroke-width="#{fmt(tw)}" stroke-linecap="round" stroke-linejoin="round"/>\n)
+        when 1
+          # Vertical + 90-degree branch right
+          io << %(  <path d="M #{fmt(cx)} #{fmt(row * cell_h)} L #{fmt(cx)} #{fmt((row + 1) * cell_h)} M #{fmt(cx)} #{fmt(cy)} L #{fmt((col + 1) * cell_w)} #{fmt(cy)}" fill="none" stroke="#{fg}" stroke-width="#{fmt(tw)}" stroke-linecap="round"/>\n)
+        when 2
+          # L-corner bottom-left to top-right
+          io << %(  <path d="M #{fmt(col * cell_w)} #{fmt(cy)} L #{fmt(cx)} #{fmt(cy)} L #{fmt(cx)} #{fmt(row * cell_h)}" fill="none" stroke="#{fg}" stroke-width="#{fmt(tw)}" stroke-linecap="round" stroke-linejoin="round"/>\n)
+        else
+          # Diagonal jumper + horizontal stub
+          io << %(  <path d="M #{fmt(col * cell_w)} #{fmt(row * cell_h)} L #{fmt(cx)} #{fmt(cy)} L #{fmt((col + 1) * cell_w)} #{fmt(cy)}" fill="none" stroke="#{fg}" stroke-width="#{fmt(tw)}" stroke-linecap="round" stroke-linejoin="round"/>\n)
+        end
+
+        # Solder via pad at cell center
+        io << %(  <circle cx="#{fmt(cx)}" cy="#{fmt(cy)}" r="#{fmt(pr)}" fill="#{fg}"/>\n)
+        io << %(  <circle cx="#{fmt(cx)}" cy="#{fmt(cy)}" r="#{fmt(hole_r)}" fill="#{bg}"/>\n)
+      end
+    end
+  end
+end
+
+# Procedural Overlapping Scales / Seigaiha Wave Arch pattern generator.
+@[Tool]
+resource ScalesPattern < PatternGenerator do
+  @[Export(range: 1..16, step: 1)]
+  property columns : Int64 = 2_i64
+
+  @[Export(range: 1..16, step: 1)]
+  property rows : Int64 = 2_i64
+
+  @[Export(range: 1..6, step: 1)]
+  property arch_rings : Int64 = 3_i64
+
+  @[Export(range: 1.0..20.0, step: 0.5)]
+  property stroke_width : Float64 = 4.0
+
+  def columns=(val : Int64)
+    return if @columns == val
+    @columns = val
+    refresh_texture!
+  end
+
+  def rows=(val : Int64)
+    return if @rows == val
+    @rows = val
+    refresh_texture!
+  end
+
+  def arch_rings=(val : Int64)
+    return if @arch_rings == val
+    @arch_rings = val
+    refresh_texture!
+  end
+
+  def stroke_width=(val : Float64)
+    return if @stroke_width == val
+    @stroke_width = val
+    refresh_texture!
+  end
+
+  def build_svg_body(io : IO, size : Float64, fg : String, bg : String) : Void
+    cols = Math.max(@columns.to_i32, 1)
+    rws = Math.max(@rows.to_i32, 1)
+    cell_w = size / cols
+    cell_h = size / rws
+    max_r = cell_w * 0.5
+    rings = Math.max(@arch_rings.to_i32, 1)
+    sw = Math.max(@stroke_width, 1.0)
+
+    (-1..(rws + 1)).each do |row|
+      cy = row * cell_h
+      offset_x = row.odd? ? (cell_w * 0.5) : 0.0
+      (-1..(cols + 1)).each do |col|
+        cx = col * cell_w + offset_x
+        io << %(  <circle cx="#{fmt(cx)}" cy="#{fmt(cy)}" r="#{fmt(max_r)}" fill="#{bg}" stroke="#{fg}" stroke-width="#{fmt(sw)}"/>\n)
+        if rings > 1
+          (1...rings).each do |r_idx|
+            r = max_r * ((rings - r_idx).to_f64 / rings)
+            io << %(  <circle cx="#{fmt(cx)}" cy="#{fmt(cy)}" r="#{fmt(r)}" fill="none" stroke="#{fg}" stroke-width="#{fmt(sw)}"/>\n)
+          end
+        end
+      end
+    end
+  end
+end
+
 # All-in-one multi-mode procedural pattern generator allowing users to switch between
-# all 13 procedural pattern types with a single dropdown in the Godot Inspector.
+# all 19 procedural pattern types with a single dropdown in the Godot Inspector.
 @[Tool]
 resource CustomPatternGenerator < PatternGenerator do
   enum PatternKind
@@ -957,6 +1469,12 @@ resource CustomPatternGenerator < PatternGenerator do
     Bricks      = 10
     Houndstooth = 11
     Halftone    = 12
+    Truchet     = 13
+    Spirals     = 14
+    Cellular    = 15
+    Tartan      = 16
+    Circuit     = 17
+    Scales      = 18
   end
 
   @[ExportEnum(CustomPatternGenerator::PatternKind)]
@@ -1096,7 +1614,7 @@ resource CustomPatternGenerator < PatternGenerator do
     when PatternKind::Houndstooth
       gen = HoundstoothPattern.new
       gen.subdivisions = @columns
-      gen. build_svg_body(io, size, fg, bg)
+      gen.build_svg_body(io, size, fg, bg)
     when PatternKind::Halftone
       gen = HalftonePattern.new
       gen.columns = @columns
@@ -1104,6 +1622,48 @@ resource CustomPatternGenerator < PatternGenerator do
       gen.max_radius = @primary_size
       gen.min_radius = Math.max(@secondary_size, 0.5)
       gen.radial_falloff = @stagger
+      gen.build_svg_body(io, size, fg, bg)
+    when PatternKind::Truchet
+      gen = TruchetPattern.new
+      gen.columns = @columns
+      gen.rows = @rows
+      gen.stroke_width = Math.max(@secondary_size, 1.0)
+      gen.curved_arcs = @stagger
+      gen.build_svg_body(io, size, fg, bg)
+    when PatternKind::Spirals
+      gen = SpiralPattern.new
+      gen.columns = @columns
+      gen.rows = @rows
+      gen.turns = (@primary_size / 10.0).clamp(0.5, 6.0)
+      gen.stroke_width = Math.max(@secondary_size, 1.0)
+      gen.build_svg_body(io, size, fg, bg)
+    when PatternKind::Cellular
+      gen = CellularPattern.new
+      gen.columns = Math.max(@columns, 2_i64)
+      gen.rows = Math.max(@rows, 2_i64)
+      gen.cell_scale = (@primary_size / 25.0).clamp(0.25, 0.95)
+      gen.rounded = @stagger
+      gen.build_svg_body(io, size, fg, bg)
+    when PatternKind::Tartan
+      gen = TartanPattern.new
+      gen.subdivisions = @columns
+      gen.main_band_width = @primary_size
+      gen.accent_band_width = Math.max(@secondary_size, 1.0)
+      gen.diagonal_twill = @stagger
+      gen.build_svg_body(io, size, fg, bg)
+    when PatternKind::Circuit
+      gen = CircuitPattern.new
+      gen.columns = Math.max(@columns, 2_i64)
+      gen.rows = Math.max(@rows, 2_i64)
+      gen.pad_radius = @primary_size * 0.4
+      gen.trace_width = Math.max(@secondary_size, 1.0)
+      gen.build_svg_body(io, size, fg, bg)
+    when PatternKind::Scales
+      gen = ScalesPattern.new
+      gen.columns = @columns
+      gen.rows = @rows
+      gen.arch_rings = Math.max(@primary_size.to_i64 // 6, 1_i64).clamp(1_i64, 6_i64)
+      gen.stroke_width = Math.max(@secondary_size, 1.0)
       gen.build_svg_body(io, size, fg, bg)
     end
   end
