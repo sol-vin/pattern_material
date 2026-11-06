@@ -1,4 +1,14 @@
 # PATTERN MATERIAL CHANGELOG
+## [0.1.6] - 2026-11-06
+### 🐛 Bug Fixes
+- ✓ **[CI]** add libxml2-dev and -Wl,--undefined-version for Linux shared library linking ([`940a1b3`](https://github.com/sol-vin/pattern_material/commit/940a1b3))
+
+### 🛠️ Chores & Tooling
+- • **[DEPS]** upgrade Lapis to Godot 4.8-beta2 and include pattern material presets/animator ([`8d8d4d0`](https://github.com/sol-vin/pattern_material/commit/8d8d4d0))
+- • use GNU ld.bfd for Linux shared libraries and macOS arm64 Godot 4.8-beta2 fallback ([`c8a9bb4`](https://github.com/sol-vin/pattern_material/commit/c8a9bb4))
+- • **[DEPS]** update lapis shard.lock to finalized 4.8-beta2 (56c198f) ([`1426034`](https://github.com/sol-vin/pattern_material/commit/1426034))
+
+---
 ## [0.1.5] - 2026-11-04
 ### 🐛 Bug Fixes
 - ✓ **[CI]** add libxml2-dev and -Wl,--undefined-version for Linux shared library linking ([`940a1b3`](https://github.com/sol-vin/pattern_material/commit/940a1b3))
